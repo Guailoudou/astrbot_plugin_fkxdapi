@@ -426,123 +426,123 @@ class ScoreboardAnalyzer:
         return leaderboard[:top_n]
 
 # ====================== 报告生成模块 ======================
-class ReportGenerator:
-    """报告生成器"""
+# class ReportGenerator:
+#     """报告生成器"""
     
-    def __init__(self, output_dir=Config.OUTPUT_DIR):
-        self.output_dir = output_dir
-        os.makedirs(output_dir, exist_ok=True)
+#     def __init__(self, output_dir=Config.OUTPUT_DIR):
+#         self.output_dir = output_dir
+#         os.makedirs(output_dir, exist_ok=True)
     
-    def generate_player_report(self, player_name, stats):
-        """为单个玩家生成报告"""
-        if not stats:
-            return False
+#     def generate_player_report(self, player_name, stats):
+#         """为单个玩家生成报告"""
+#         if not stats:
+#             return False
         
-        # 创建玩家目录
-        player_dir = os.path.join(self.output_dir, player_name)
-        os.makedirs(player_dir, exist_ok=True)
+#         # 创建玩家目录
+#         player_dir = os.path.join(self.output_dir, player_name)
+#         os.makedirs(player_dir, exist_ok=True)
         
-        # 生成报告文件
-        report_file = os.path.join(player_dir, f"{player_name}_数据报告.md")
+#         # 生成报告文件
+#         report_file = os.path.join(player_dir, f"{player_name}_数据报告.md")
         
-        with open(report_file, 'w', encoding='utf-8') as f:
-            # 标题
-            f.write(f"# BLOCK-OPS 玩家数据报告\n\n")
-            f.write(f"**查询玩家:** {player_name}\n")
-            f.write(f"**生成时间:** {stats['查询时间']}\n\n")
+#         with open(report_file, 'w', encoding='utf-8') as f:
+#             # 标题
+#             f.write(f"# BLOCK-OPS 玩家数据报告\n\n")
+#             f.write(f"**查询玩家:** {player_name}\n")
+#             f.write(f"**生成时间:** {stats['查询时间']}\n\n")
             
-            # 生涯数据
-            f.write("## 生涯数据\n")
-            f.write("| 项目 | 数值 |\n")
-            f.write("|------|------|\n")
-            for key, value in stats['生涯数据'].items():
-                f.write(f"| {key} | {value} |\n")
-            f.write("\n")
+#             # 生涯数据
+#             f.write("## 生涯数据\n")
+#             f.write("| 项目 | 数值 |\n")
+#             f.write("|------|------|\n")
+#             for key, value in stats['生涯数据'].items():
+#                 f.write(f"| {key} | {value} |\n")
+#             f.write("\n")
             
-            # 职业数据
-            if stats['职业数据']:
-                f.write("## 职业数据\n")
-                f.write("| 职业 | 熟练度 |\n")
-                f.write("|------|--------|\n")
-                for class_name, skill in stats['职业数据'].items():
-                    f.write(f"| {class_name} | {skill} |\n")
-                f.write("\n")
+#             # 职业数据
+#             if stats['职业数据']:
+#                 f.write("## 职业数据\n")
+#                 f.write("| 职业 | 熟练度 |\n")
+#                 f.write("|------|--------|\n")
+#                 for class_name, skill in stats['职业数据'].items():
+#                     f.write(f"| {class_name} | {skill} |\n")
+#                 f.write("\n")
             
-            # 载具数据
-            if stats['载具数据']:
-                f.write("## 载具数据\n")
-                f.write("| 载具类型 | 熟练度 |\n")
-                f.write("|----------|--------|\n")
-                for vehicle_type, skill in stats['载具数据'].items():
-                    f.write(f"| {vehicle_type} | {skill} |\n")
-                f.write("\n")
+#             # 载具数据
+#             if stats['载具数据']:
+#                 f.write("## 载具数据\n")
+#                 f.write("| 载具类型 | 熟练度 |\n")
+#                 f.write("|----------|--------|\n")
+#                 for vehicle_type, skill in stats['载具数据'].items():
+#                     f.write(f"| {vehicle_type} | {skill} |\n")
+#                 f.write("\n")
             
-            # 数据摘要
-            f.write("## 数据摘要\n")
-            life_stats = stats['生涯数据']
-            f.write(f"- **总场次:** {life_stats.get('总游玩场次', 0)}\n")
-            f.write(f"- **胜率:** {life_stats.get('胜率', '0%')}\n")
-            f.write(f"- **K/D比:** {life_stats.get('K/D', 0)}\n")
-            f.write(f"- **总得分:** {life_stats.get('生涯累计得分', 0)}\n")
-            f.write(f"- **等级:** {life_stats.get('等级', 0)}\n")
+#             # 数据摘要
+#             f.write("## 数据摘要\n")
+#             life_stats = stats['生涯数据']
+#             f.write(f"- **总场次:** {life_stats.get('总游玩场次', 0)}\n")
+#             f.write(f"- **胜率:** {life_stats.get('胜率', '0%')}\n")
+#             f.write(f"- **K/D比:** {life_stats.get('K/D', 0)}\n")
+#             f.write(f"- **总得分:** {life_stats.get('生涯累计得分', 0)}\n")
+#             f.write(f"- **等级:** {life_stats.get('等级', 0)}\n")
         
-        logger.info(f"✅ 已生成玩家报告: {report_file}")
-        return report_file
+#         logger.info(f"✅ 已生成玩家报告: {report_file}")
+#         return report_file
     
-    def generate_global_leaderboard(self, analyzer):
-        """生成全局排行榜"""
-        leaderboard_file = os.path.join(self.output_dir, "排行榜.md")
+#     def generate_global_leaderboard(self, analyzer):
+#         """生成全局排行榜"""
+#         leaderboard_file = os.path.join(self.output_dir, "排行榜.md")
         
-        with open(leaderboard_file, 'w', encoding='utf-8') as f:
-            f.write("# BLOCK-OPS 排行榜\n\n")
-            f.write(f"**生成时间:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-            f.write(f"**总玩家数:** {len(analyzer.get_all_players())}\n\n")
+#         with open(leaderboard_file, 'w', encoding='utf-8') as f:
+#             f.write("# BLOCK-OPS 排行榜\n\n")
+#             f.write(f"**生成时间:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+#             f.write(f"**总玩家数:** {len(analyzer.get_all_players())}\n\n")
             
-            # 总得分排行榜
-            f.write("## 总得分排行榜\n")
-            f.write("| 排名 | 玩家名 | 总得分 |\n")
-            f.write("|------|--------|--------|\n")
-            leaderboard = analyzer.generate_leaderboard("totalscores", 20)
-            for i, entry in enumerate(leaderboard, 1):
-                f.write(f"| {i} | {entry['玩家名']} | {entry['分数']} |\n")
-            f.write("\n")
+#             # 总得分排行榜
+#             f.write("## 总得分排行榜\n")
+#             f.write("| 排名 | 玩家名 | 总得分 |\n")
+#             f.write("|------|--------|--------|\n")
+#             leaderboard = analyzer.generate_leaderboard("totalscores", 20)
+#             for i, entry in enumerate(leaderboard, 1):
+#                 f.write(f"| {i} | {entry['玩家名']} | {entry['分数']} |\n")
+#             f.write("\n")
             
-            # K/D排行榜
-            f.write("## K/D排行榜\n")
-            f.write("| 排名 | 玩家名 | K/D |\n")
-            f.write("|------|--------|-----|\n")
-            leaderboard = analyzer.generate_leaderboard("K/D", 20)
-            for i, entry in enumerate(leaderboard, 1):
-                f.write(f"| {i} | {entry['玩家名']} | {entry['分数']} |\n")
-            f.write("\n")
+#             # K/D排行榜
+#             f.write("## K/D排行榜\n")
+#             f.write("| 排名 | 玩家名 | K/D |\n")
+#             f.write("|------|--------|-----|\n")
+#             leaderboard = analyzer.generate_leaderboard("K/D", 20)
+#             for i, entry in enumerate(leaderboard, 1):
+#                 f.write(f"| {i} | {entry['玩家名']} | {entry['分数']} |\n")
+#             f.write("\n")
             
-            # 胜率排行榜
-            f.write("## 胜率排行榜\n")
-            f.write("| 排名 | 玩家名 | 胜率 |\n")
-            f.write("|------|--------|------|\n")
-            leaderboard = analyzer.generate_leaderboard("胜率", 20)
-            for i, entry in enumerate(leaderboard, 1):
-                f.write(f"| {i} | {entry['玩家名']} | {entry['分数']}% |\n")
-            f.write("\n")
+#             # 胜率排行榜
+#             f.write("## 胜率排行榜\n")
+#             f.write("| 排名 | 玩家名 | 胜率 |\n")
+#             f.write("|------|--------|------|\n")
+#             leaderboard = analyzer.generate_leaderboard("胜率", 20)
+#             for i, entry in enumerate(leaderboard, 1):
+#                 f.write(f"| {i} | {entry['玩家名']} | {entry['分数']}% |\n")
+#             f.write("\n")
             
-            # 击杀排行榜
-            f.write("## 击杀排行榜\n")
-            f.write("| 排名 | 玩家名 | 击杀数 |\n")
-            f.write("|------|--------|--------|\n")
-            leaderboard = analyzer.generate_leaderboard("life_kill", 20)
-            for i, entry in enumerate(leaderboard, 1):
-                f.write(f"| {i} | {entry['玩家名']} | {entry['分数']} |\n")
+#             # 击杀排行榜
+#             f.write("## 击杀排行榜\n")
+#             f.write("| 排名 | 玩家名 | 击杀数 |\n")
+#             f.write("|------|--------|--------|\n")
+#             leaderboard = analyzer.generate_leaderboard("life_kill", 20)
+#             for i, entry in enumerate(leaderboard, 1):
+#                 f.write(f"| {i} | {entry['玩家名']} | {entry['分数']} |\n")
             
-            # 等级排行榜
-            f.write("\n## 等级排行榜\n")
-            f.write("| 排名 | 玩家名 | 等级 |\n")
-            f.write("|------|--------|------|\n")
-            leaderboard = analyzer.generate_leaderboard("levels", 20)
-            for i, entry in enumerate(leaderboard, 1):
-                f.write(f"| {i} | {entry['玩家名']} | {entry['分数']} |\n")
+#             # 等级排行榜
+#             f.write("\n## 等级排行榜\n")
+#             f.write("| 排名 | 玩家名 | 等级 |\n")
+#             f.write("|------|--------|------|\n")
+#             leaderboard = analyzer.generate_leaderboard("levels", 20)
+#             for i, entry in enumerate(leaderboard, 1):
+#                 f.write(f"| {i} | {entry['玩家名']} | {entry['分数']} |\n")
         
-        logger.info(f"✅ 已生成全局排行榜: {leaderboard_file}")
-        return leaderboard_file
+#         logger.info(f"✅ 已生成全局排行榜: {leaderboard_file}")
+#         return leaderboard_file
 
 # ====================== API接口模块 ======================
 class BlockOpsAPI:
