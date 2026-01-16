@@ -62,25 +62,41 @@ async def download_scoreboard_file():
             "Content-Type": "application/json; charset=utf-8",
             "X-Requested-With": "XMLHttpRequest"
         }
-    
+    async def get_download_file(instance_id, file_path):
+        """获取下载文件参数"""
+        url = f"{Config.BASE_URL}files/download?apikey={Config.API_KEY}"
+        params = {"daemonId": Config.DAEMON_ID, "uuid": instance_id ,"file_name": file_path}
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, params=params, headers=get_headers(), timeout=30) as response:
+                if response.status >= 400:
+                    text = await response.text()
+                    logger.error(f"HTTP 错误 {response.status}: {text}")
+                    return {"success": False, "error": f"HTTP {response.status}"}
+                result = await response.json()
+                if result.get("status") == 200:
+                    return result.get("data", "")
+                else:
+                    message = result.get("message", "未知错误")
+                    logger.error(f"下载失败: {message}")
+                    return {"success": False, "error": message}
     async def download_file(instance_id, file_path):
         """从指定实例下载文件"""
-        url = f"{Config.BASE_URL}files?apikey={Config.API_KEY}"
-        params = {"daemonId": Config.DAEMON_ID, "uuid": instance_id}
-        data = {"target": file_path}
+        download_result = await get_download_file(instance_id, file_path)
+        url = f"{download_result.get("addr", "")}/download/{download_result.get("password", "")}/scoreboard.dat"
+        # url = f"{Config.BASE_URL}files?apikey={Config.API_KEY}"
+        # params = {"daemonId": Config.DAEMON_ID, "uuid": instance_id}
+        # data = {"target": file_path}
         logger.info(f"开始下载文件...")
         logger.info(f"实例ID: {instance_id}")
         logger.info(f"文件路径: {file_path}")
+        logger.info(f"url: {url}")
         
         headers = get_headers()  # 假设 get_headers 是一个函数，调用后返回 dict
 
         async with aiohttp.ClientSession() as session:
             try:
-                async with session.put(
+                async with session.get(
                     url,
-                    params=params,
-                    headers=headers,
-                    json=data,  # 注意：这里 data 需要在函数作用域内定义！
                     timeout=aiohttp.ClientTimeout(total=30)
                 ) as response:
                     # 检查 HTTP 状态是否成功（类似 raise_for_status）
@@ -89,41 +105,60 @@ async def download_scoreboard_file():
                         logger.error(f"HTTP 错误 {response.status}: {text}")
                         return {"success": False, "error": f"HTTP {response.status}"}
                     # logger.info(f"response={response.text}")
-                    text = await response.text()
-                    result = json.loads(text)
-                    if result.get("status") == 200:
-                        logger.info("文件下载成功!")
+                    # text = await response.text()
+                    # result = json.loads(text)
+                    file_content = await response.read()  # bytes
+                    logger.info(f"文件下载成功! 大小: {len(file_content)} 字节")
 
-                        file_content = result.get("data", "")
-                        if file_content is not None:
-                            logger.info(f"文件内容大小: {len(str(file_content))} 字节")
+                    filename = os.path.basename(file_path)
+                    local_filename = filename
 
-                            filename = os.path.basename(file_path)
-                            local_filename = filename  # 或加时间戳避免冲突
+                    # ✅ 以二进制模式写入（scoreboard.dat 是二进制 NBT 文件！）
+                    with open(local_filename, 'wb') as f:
+                        f.write(file_content)
 
-                            # 同步写入（若需完全异步，可用 aiofiles）
-                            with open(local_filename, 'w', encoding='utf-8') as f:
-                                if isinstance(file_content, (dict, list)):
-                                    json.dump(file_content, f, ensure_ascii=False, indent=2)
-                                else:
-                                    f.write(str(file_content))
+                    full_path = os.path.abspath(local_filename)
+                    logger.info(f"文件已保存到: {full_path}")
 
-                            full_path = os.path.abspath(local_filename)
-                            logger.info(f"文件已保存到: {full_path}")
+                    return {
+                        "success": True,
+                        "filename": local_filename,
+                        "size": len(file_content),
+                        "full_path": full_path
+                    }
+                    # if result.get("status") == 200:
+                    #     logger.info("文件下载成功!")
 
-                            return {
-                                "success": True,
-                                "filename": local_filename,
-                                "size": len(str(file_content)),
-                                "full_path": full_path
-                            }
-                        else:
-                            logger.warning("警告: 文件内容为空")
-                            return {"success": True, "content": None}
-                    else:
-                        message = result.get("message", "未知错误")
-                        logger.error(f"下载失败: {message}")
-                        return {"success": False, "error": message}
+                    #     file_content = result.get("data", "")
+                    #     if file_content is not None:
+                    #         logger.info(f"文件内容大小: {len(str(file_content))} 字节")
+
+                    #         filename = os.path.basename(file_path)
+                    #         local_filename = filename  # 或加时间戳避免冲突
+
+                    #         # 同步写入（若需完全异步，可用 aiofiles）
+                    #         with open(local_filename, 'w', encoding='utf-8') as f:
+                    #             if isinstance(file_content, (dict, list)):
+                    #                 json.dump(file_content, f, ensure_ascii=False, indent=2)
+                    #             else:
+                    #                 f.write(str(file_content))
+
+                    #         full_path = os.path.abspath(local_filename)
+                    #         logger.info(f"文件已保存到: {full_path}")
+
+                    #         return {
+                    #             "success": True,
+                    #             "filename": local_filename,
+                    #             "size": len(str(file_content)),
+                    #             "full_path": full_path
+                    #         }
+                    #     else:
+                    #         logger.warning("警告: 文件内容为空")
+                    #         return {"success": True, "content": None}
+                    # else:
+                    #     message = result.get("message", "未知错误")
+                    #     logger.error(f"下载失败: {message}")
+                    #     return {"success": False, "error": message}
 
             except asyncio.TimeoutError:
                 logger.error("请求超时（30秒）")
