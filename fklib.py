@@ -26,7 +26,7 @@ class Config:
     if not _raw_nbt_dir.endswith(('/', '\\')):
         _raw_nbt_dir += '/'
     NBT_DIR = _raw_nbt_dir.replace('\\', '/')
-    JS_FILE = f"{NBT_DIR}nbtfile_lib_tester.js"
+    JS_FILE = f"{NBT_DIR}/nbtfile_lib_tester.js"
     # 计分板项目映射（根据实际数据调整）
     OBJECTIVE_MAPPING = {
         # 生涯数据
@@ -105,7 +105,7 @@ async def download_scoreboard_file():
                             # filename = os.path.basename(file_path)
                             # local_filename = filename  # 或加时间戳避免冲突
                             filename = Config.FILE_PATH.split('/')[-1]  # 替代 os.path.basename
-                            local_path = f"{Config.NBT_DIR}{filename}"
+                            local_path = f"{Config.NBT_DIR}/{filename}"
 
                             # 同步写入（若需完全异步，可用 aiofiles）
                             with open(local_path, 'w', encoding='utf-8') as f:
@@ -220,7 +220,7 @@ def parse_nbt_file():
         
         # 检查输出文件
         #output_json = os.path.join(js_dir, "scoreboard.json")
-        output_json = f"{Config.NBT_DIR}scoreboard.json"
+        output_json = f"{Config.NBT_DIR}/scoreboard.json"
         if os.path.exists(output_json):
             logger.info(f"✅ 已生成输出文件: {output_json}")
             logger.info(f"文件大小: {os.path.getsize(output_json)} 字节")
