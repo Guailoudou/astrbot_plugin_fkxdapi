@@ -21,8 +21,12 @@ class Config:
     # 文件路径
     NBT_DIR = r"./"
     JS_FILE = r"./nbtfile_lib_tester.js"
-    OUTPUT_DIR = r"D:\python-tools\MC\玩家数据报告"  # 玩家报告输出目录
-    
+    #OUTPUT_DIR = r"D:\python-tools\MC\玩家数据报告"  # 玩家报告输出目录
+    _raw_nbt_dir = NBT_DIR
+    if not _raw_nbt_dir.endswith(('/', '\\')):
+        _raw_nbt_dir += '/'
+    NBT_DIR = _raw_nbt_dir.replace('\\', '/')
+    JS_FILE = f"{NBT_DIR}nbtfile_lib_tester.js"
     # 计分板项目映射（根据实际数据调整）
     OBJECTIVE_MAPPING = {
         # 生涯数据
@@ -98,22 +102,24 @@ async def download_scoreboard_file():
                         if file_content is not None:
                             logger.info(f"文件内容大小: {len(str(file_content))} 字节")
 
-                            filename = os.path.basename(file_path)
-                            local_filename = filename  # 或加时间戳避免冲突
+                            # filename = os.path.basename(file_path)
+                            # local_filename = filename  # 或加时间戳避免冲突
+                            filename = Config.FILE_PATH.split('/')[-1]  # 替代 os.path.basename
+                            local_path = f"{Config.NBT_DIR}{filename}"
 
                             # 同步写入（若需完全异步，可用 aiofiles）
-                            with open(local_filename, 'w', encoding='utf-8') as f:
+                            with open(local_path, 'w', encoding='utf-8') as f:
                                 if isinstance(file_content, (dict, list)):
                                     json.dump(file_content, f, ensure_ascii=False, indent=2)
                                 else:
                                     f.write(str(file_content))
 
-                            full_path = os.path.abspath(local_filename)
+                            full_path = local_path
                             logger.info(f"文件已保存到: {full_path}")
 
                             return {
                                 "success": True,
-                                "filename": local_filename,
+                                "filename": local_path,
                                 "size": len(str(file_content)),
                                 "full_path": full_path
                             }
@@ -166,8 +172,9 @@ def check_nodejs_installation():
 
 def parse_nbt_file():
     """解析NBT文件为JSON"""
-    
-    if not os.path.exists(Config.JS_FILE):
+    dat_file = f"{Config.NBT_DIR}scoreboard.dat"
+    if not os.path.exists(dat_file):
+    # if not os.path.exists(Config.JS_FILE):
         logger.info(f"错误: 文件不存在 - {Config.JS_FILE}")
         return {"success": False, "error": f"文件不存在: {Config.JS_FILE}"}
     
@@ -212,7 +219,8 @@ def parse_nbt_file():
         logger.info(f"退出代码: {result.returncode}")
         
         # 检查输出文件
-        output_json = os.path.join(js_dir, "scoreboard.json")
+        #output_json = os.path.join(js_dir, "scoreboard.json")
+        output_json = f"{Config.NBT_DIR}scoreboard.json"
         if os.path.exists(output_json):
             logger.info(f"✅ 已生成输出文件: {output_json}")
             logger.info(f"文件大小: {os.path.getsize(output_json)} 字节")
