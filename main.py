@@ -1,7 +1,7 @@
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register,StarTools
 from astrbot.api import logger
-import fklib
+from .fklib import *
 # import random
 # from datetime import datetime
 # from zoneinfo import ZoneInfo
@@ -10,7 +10,7 @@ class fkxdApi(Star):
     def __init__(self, context: Context,config: AstrBotConfig):
         super().__init__(context)
         logger.info("\n🔍 检查环境...")
-        if not fklib.check_nodejs_installation():
+        if not check_nodejs_installation():
             logger.info("错误，环境不可用")
             return
         logger.info("开始获取配置文件")
@@ -22,17 +22,17 @@ class fkxdApi(Star):
     async def initialize(self):
         """可选择实现异步的插件初始化方法，当实例化该插件类之后会自动调用该方法。"""
         logger.info("开始初始化")
-        fklib.Config.API_KEY = self.config.API_KEY
-        fklib.Config.BASE_URL = self.config.BASE_URL
-        fklib.Config.DAEMON_ID = self.config.DAEMON_ID
-        fklib.Config.INSTANCE_ID = self.config.INSTANCE_ID
-        fklib.Config.FILE_PATH = self.config.FILE_PATH
-        fklib.Config.NBT_DIR = self.data_dir
+        Config.API_KEY = self.config.API_KEY
+        Config.BASE_URL = self.config.BASE_URL
+        Config.DAEMON_ID = self.config.DAEMON_ID
+        Config.INSTANCE_ID = self.config.INSTANCE_ID
+        Config.FILE_PATH = self.config.FILE_PATH
+        Config.NBT_DIR = self.data_dir
         await self.get_data()
     async def get_data(self):
         # 下载文件
         logger.info("\n📥 第一步：下载 scoreboard.dat 文件...")
-        download_result = await fklib.download_scoreboard_file()
+        download_result = await download_scoreboard_file()
         
         if not download_result.get("success"):
             logger.info(f"\n❌ 下载失败: {download_result.get('error')}")
@@ -40,7 +40,7 @@ class fkxdApi(Star):
         
         # 解析文件
         logger.info("\n🔧 第二步：解析NBT文件...")
-        parse_result = fklib.parse_nbt_file()
+        parse_result = parse_nbt_file()
         
         if not parse_result.get("success"):
             logger.info(f"\n❌ 解析失败: {parse_result.get('error')}")
@@ -48,16 +48,16 @@ class fkxdApi(Star):
         
         # 创建分析器
         json_data = parse_result["data"]
-        self.analyzer = fklib.ScoreboardAnalyzer(json_data)
+        self.analyzer = ScoreboardAnalyzer(json_data)
         
         logger.info(f"\n✅ 数据加载完成!")
         logger.info(f"- 总玩家数: {len(self.analyzer.get_all_players())}")
         
         # 创建API
-        self.fkapi = fklib.BlockOpsAPI(self.analyzer)
+        self.fkapi = BlockOpsAPI(self.analyzer)
         
         # 创建报告生成器
-        # self.report_gen = fklib.ReportGenerator()
+        # self.report_gen = ReportGenerator()
     # 注册指令的装饰器。指令名为 helloworld。注册成功后，发送 `/helloworld` 就会触发这个指令，并回复 `你好, {user_name}!`
     @filter.command("fkxd_cx", alias={'数据查询'})
     async def cmd_cx(self, event: AstrMessageEvent, player_name: str):
