@@ -1,0 +1,32 @@
+{
+  "API_KEY": {
+    "description": "API_KEY",
+    "type": "string",
+    "hint": "填api",
+    "obvious_hint": true
+  },
+  "BASE_URL": {
+    "description": "BASE_URL",
+    "type": "string",
+    "hint": "填BASE_URL",
+    "obvious_hint": true
+  },
+  "DAEMON_ID": {
+    "description": "DAEMON_ID",
+    "type": "string",
+    "hint": "填DAEMON_ID",
+    "obvious_hint": true
+  },
+  "INSTANCE_ID": {
+    "description": "INSTANCE_ID",
+    "type": "string",
+    "hint": "填INSTANCE_ID",
+    "obvious_hint": true
+  },
+  "FILE_PATH": {
+    "description": "FILE_PATH",
+    "type": "string",
+    "hint": "填FILE_PATH",
+    "obvious_hint": true
+  }
+}
