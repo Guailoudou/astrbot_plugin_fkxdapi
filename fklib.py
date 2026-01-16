@@ -143,7 +143,7 @@ async def download_scoreboard_file():
     result = await download_file(Config.INSTANCE_ID, Config.FILE_PATH)
     
     logger.info("=" * 50)
-    logger.info("下载结果:", json.dumps(result, indent=2, ensure_ascii=False))
+    logger.info("下载结果:"+json.dumps(result, indent=2, ensure_ascii=False))
     logger.info("=" * 50)
     
     return result
