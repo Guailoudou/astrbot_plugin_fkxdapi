@@ -28,10 +28,11 @@ class fkxdApi(Star):
         fklib.Config.INSTANCE_ID = self.config.INSTANCE_ID
         fklib.Config.FILE_PATH = self.config.FILE_PATH
         fklib.Config.NBT_DIR = self.data_dir
+        await self.get_data()
     async def get_data(self):
         # 下载文件
         logger.info("\n📥 第一步：下载 scoreboard.dat 文件...")
-        download_result = fklib.download_scoreboard_file()
+        download_result = await fklib.download_scoreboard_file()
         
         if not download_result.get("success"):
             logger.info(f"\n❌ 下载失败: {download_result.get('error')}")
