@@ -82,7 +82,7 @@ async def download_scoreboard_file():
     async def download_file(instance_id, file_path):
         """从指定实例下载文件"""
         download_result = await get_download_file(instance_id, file_path)
-        url = f"{download_result.get("addr", "")}/download/{download_result.get("password", "")}/scoreboard.dat"
+        url = f"{download_result.get('addr', '')}/download/{download_result.get('', '')}/scoreboard.dat"
         # url = f"{Config.BASE_URL}files?apikey={Config.API_KEY}"
         # params = {"daemonId": Config.DAEMON_ID, "uuid": instance_id}
         # data = {"target": file_path}
