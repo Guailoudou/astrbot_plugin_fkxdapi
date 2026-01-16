@@ -88,7 +88,7 @@ async def download_scoreboard_file():
                         text = await response.text()
                         logger.error(f"HTTP 错误 {response.status}: {text}")
                         return {"success": False, "error": f"HTTP {response.status}"}
-                    logger.info(f"response={response}")
+                    logger.info(f"response={response.text}")
                     result = await response.json()
 
                     if result.get("status") == 200:
