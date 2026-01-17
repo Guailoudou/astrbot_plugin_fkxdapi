@@ -58,7 +58,7 @@ class fkxdApi(Star):
         
         # 创建报告生成器
         # self.report_gen = ReportGenerator()
-    @filter.command("life_stats", alias={'生涯数据查询'})
+    @filter.command("life_stats", alias={'生涯'})
     async def cmd_lifecx(self, event: AstrMessageEvent, player_name: str):
         '''查询生涯数据'''
         if player_name:
@@ -80,7 +80,7 @@ class fkxdApi(Star):
             
             else:
                 yield event.plain_result(f"\n❌ {result['message']}")
-    @filter.command("class_stats", alias={'职业数据查询'})
+    @filter.command("class_stats", alias={'职业'})
     async def cmd_classcx(self, event: AstrMessageEvent, player_name: str):
         '''查询职业数据'''
         if player_name:
@@ -103,7 +103,7 @@ class fkxdApi(Star):
             else:
                 yield event.plain_result(f"\n❌ {result['message']}")
 
-    @filter.command("vehicle_stats", alias={'载具数据查询'})
+    @filter.command("vehicle_stats", alias={'载具'})
     async def cmd_vehiclecx(self, event: AstrMessageEvent, player_name: str):
         '''查询载具数据'''
         if player_name:
