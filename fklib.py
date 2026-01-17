@@ -588,7 +588,8 @@ class BlockOpsAPI:
                 "message": f"你所查询的玩家不在方块行动官方数据库中。\n可能原因如下：\n1. 你输入了错误的玩家ID\n2. 官方数据库还未更新\n3. 该玩家ID并未在方块行动官方服务器中游玩。"
             }
         
-        response = f"""BLOCK-OPS生涯数据查询
+        response = f"""
+BLOCK-OPS生涯数据查询
 
 查询玩家：{player_name}
 
@@ -651,7 +652,7 @@ class BlockOpsAPI:
         if not complete_stats:
             return {
                 "success": False,
-                "message": f"你所查询的玩家不在方块行动官方数据库中。"
+                "message": f"你所查询的玩家不在方块行动官方数据库中。\n可能原因如下：你输入了错误的玩家ID/官方数据库还未更新/该玩家ID并未在方块行动官方服务器中游玩。"
             }
         
         return {

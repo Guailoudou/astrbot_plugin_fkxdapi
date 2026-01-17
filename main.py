@@ -58,12 +58,11 @@ class fkxdApi(Star):
         
         # 创建报告生成器
         # self.report_gen = ReportGenerator()
-    # 注册指令的装饰器。指令名为 helloworld。注册成功后，发送 `/helloworld` 就会触发这个指令，并回复 `你好, {user_name}!`
-    @filter.command("fkxd_cx", alias={'数据查询'})
-    async def cmd_cx(self, event: AstrMessageEvent, player_name: str):
-        '''查询'''
+    @filter.command("life_stats", alias={'生涯数据查询'})
+    async def cmd_lifecx(self, event: AstrMessageEvent, player_name: str):
+        '''查询生涯数据'''
         if player_name:
-            print(f"\n查询玩家: {player_name}")
+            logger.info(f"\n查询玩家: {player_name}")
             
             # 查询所有数据
             result = self.fkapi.query_all_stats(player_name)
@@ -78,19 +77,30 @@ class fkxdApi(Star):
                     msg +="=" * 10
                     msg +=life_result["data"]
                     yield event.plain_result(f"{msg}")
-                
-                # 生成报告
-                # gen_report = input(f"\n是否为 {player_name} 生成详细报告? (y/n): ").lower()
-                # if gen_report == 'y':
-                #     complete_stats = self.analyzer.get_complete_stats(player_name)
-                #     if complete_stats:
-                #         report_file = self.report_gen.generate_player_report(player_name, complete_stats)
-                #         print(f"报告已保存: {report_file}")
             
             else:
-                print(f"\n❌ {result['message']}")
-
-        #yield event.plain_result(f"{user_name}，你今天的人品是{rp}，{message_str}")
-
+                yield event.plain_result(f"\n❌ {result['message']}")
+    @filter.command("class_stats", alias={'职业数据查询'})
+    async def cmd_classcx(self, event: AstrMessageEvent, player_name: str):
+        '''查询职业数据'''
+        if player_name:
+            logger.info(f"\n查询玩家: {player_name}")
+            
+            # 查询所有数据
+            result = self.fkapi.query_all_stats(player_name)
+            
+            if result["success"]:
+                # 显示生涯数据
+                life_result = self.fkapi.query_class_stats(player_name)
+                if life_result["success"]:
+                    msg = ""
+                    msg +="\n" + "=" * 10
+                    msg +="职业数据:"
+                    msg +="=" * 10
+                    msg +=life_result["data"]
+                    yield event.plain_result(f"{msg}")
+            
+            else:
+                yield event.plain_result(f"\n❌ {result['message']}")
     async def terminate(self):
         '''可选择实现 terminate 函数，当插件被卸载/停用时会调用。'''
