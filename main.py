@@ -36,7 +36,7 @@ class fkxdApi(Star):
         
         if not download_result.get("success"):
             logger.info(f"\n❌ 下载失败: {download_result.get('error')}")
-            return
+            return 0
         
         # 解析文件
         logger.info("\n🔧 第二步：解析NBT文件...")
@@ -44,7 +44,7 @@ class fkxdApi(Star):
         
         if not parse_result.get("success"):
             logger.info(f"\n❌ 解析失败: {parse_result.get('error')}")
-            return
+            return 0
         
         # 创建分析器
         json_data = parse_result["data"]
@@ -58,6 +58,7 @@ class fkxdApi(Star):
         
         # 创建报告生成器
         # self.report_gen = ReportGenerator()
+        return len(self.analyzer.get_all_players())
     @filter.command("life_stats", alias={'生涯'})
     async def cmd_lifecx(self, event: AstrMessageEvent, player_name: str):
         '''查询生涯数据'''
@@ -129,10 +130,13 @@ class fkxdApi(Star):
     async def cmd_bo_updata(self, event: AstrMessageEvent):
         """更新方块行动数据"""
         if self.is_admin_or_authorized(event):
-            await self.get_data()
-            yield event.plain_result("\n✅ 数据更新完成")
+            player = await self.get_data()
+            if(player == 0):
+                yield event.plain_result("❌ 数据更新失败")
+            else:
+                yield event.plain_result(f"✅ 数据更新完成，获取到 {player} 个玩家数据")
         else:
-            yield event.plain_result("\n❌ 无权限")
+            yield event.plain_result("❌ 无权限")
 
     def is_admin_or_authorized(self, event: AstrMessageEvent) -> bool:
         """检查用户权限"""
