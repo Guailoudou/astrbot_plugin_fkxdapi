@@ -102,5 +102,28 @@ class fkxdApi(Star):
             
             else:
                 yield event.plain_result(f"\n❌ {result['message']}")
+
+    @filter.command("vehicle_stats", alias={'载具数据查询'})
+    async def cmd_vehiclecx(self, event: AstrMessageEvent, player_name: str):
+        '''查询载具数据'''
+        if player_name:
+            logger.info(f"\n查询玩家: {player_name}")
+            
+            # 查询所有数据
+            result = self.fkapi.query_all_stats(player_name)
+            
+            if result["success"]:
+                # 显示生涯数据
+                life_result = self.fkapi.query_vehicle_stats(player_name)
+                if life_result["success"]:
+                    msg = ""
+                    msg +="\n" + "=" * 10
+                    msg +="载具数据:"
+                    msg +="=" * 10
+                    msg +=life_result["data"]
+                    yield event.plain_result(f"{msg}")
+            
+            else:
+                yield event.plain_result(f"\n❌ {result['message']}")
     async def terminate(self):
         '''可选择实现 terminate 函数，当插件被卸载/停用时会调用。'''
