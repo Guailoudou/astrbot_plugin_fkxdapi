@@ -590,17 +590,11 @@ class BlockOpsAPI:
         
         response = f"""
 BLOCK-OPS生涯数据查询
-
 查询玩家：{player_name}
-
 等级：{stats.get('等级', 0)} 升级所需经验：{stats.get('升级所需经验', 0)} 当前拥有经验：{stats.get('当前拥有经验', 0)}
-
 总游玩场次：{stats.get('总游玩场次', 0)} 获胜场次：{stats.get('获胜场次', 0)} 失败场次: {stats.get('失败场次', 0)}
-
 生涯累计得分：{stats.get('生涯累计得分', 0)}
-
 击杀数：{stats.get('生涯击杀数', 0)} 死亡数：{stats.get('生涯死亡数', 0)} K/D：{stats.get('K/D', 0)}
-
 胜率：{stats.get('胜率', '0%')}"""
         
         return {"success": True, "data": response, "stats": stats}
@@ -615,7 +609,7 @@ BLOCK-OPS生涯数据查询
                 "message": f"你所查询的玩家不在方块行动官方数据库中。\n可能原因如下：\n1. 你输入了错误的玩家ID\n2. 官方数据库还未更新\n3. 该玩家ID并未在方块行动官方服务器中游玩。"
             }
         
-        response_lines = [f"BLOCK-OPS 职业数据查询", f"", f"查询玩家：{player_name}", f""]
+        response_lines = [f"",f"BLOCK-OPS 职业数据查询", f"查询玩家：{player_name}"]
         
         for class_name, skill in stats.items():
             response_lines.append(f"{class_name}: {skill}")
@@ -633,7 +627,7 @@ BLOCK-OPS生涯数据查询
                 "message": f"你所查询的玩家不在方块行动官方数据库中。\n可能原因如下：\n1. 你输入了错误的玩家ID\n2. 官方数据库还未更新\n3. 该玩家ID并未在方块行动官方服务器中游玩。"
             }
         
-        response_lines = [f"BLOCK-OPS 载具数据查询", f"", f"查询玩家：{player_name}", f""]
+        response_lines = [f"",f"BLOCK-OPS 载具数据查询", f"查询玩家：{player_name}"]
         
         for vehicle_type, skill in stats.items():
             response_lines.append(f"{vehicle_type}: {skill}")
