@@ -2,13 +2,13 @@
   "API_KEY": {
     "description": "API_KEY",
     "type": "string",
-    "hint": "填api",
+    "hint": "填api mcsm的api key",
     "obvious_hint": true
   },
   "BASE_URL": {
     "description": "BASE_URL",
     "type": "string",
-    "hint": "填BASE_URL",
+    "hint": "填BASE_URL 例：http://abc.com:43333/api/",
     "obvious_hint": true
   },
   "DAEMON_ID": {
@@ -26,7 +26,7 @@
   "FILE_PATH": {
     "description": "FILE_PATH",
     "type": "string",
-    "hint": "填FILE_PATH",
+    "hint": "填FILE_PATH 文件路径，例：/Block Ops/data/scoreboard.dat",
     "obvious_hint": false
   },
   "authorized_users": {
