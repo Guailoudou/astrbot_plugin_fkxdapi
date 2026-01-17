@@ -125,5 +125,19 @@ class fkxdApi(Star):
             
             else:
                 yield event.plain_result(f"\n❌ {result['message']}")
+    @filter.command("bo_updata", alias={'方块行动更新'})
+    async def cmd_bo_updata(self, event: AstrMessageEvent):
+        """更新方块行动数据"""
+        if self.is_admin_or_authorized(event):
+            await self.get_data()
+            yield event.plain_result("\n✅ 数据更新完成")
+        else:
+            yield event.plain_result("\n❌ 无权限")
+
+    def is_admin_or_authorized(self, event: AstrMessageEvent) -> bool:
+        """检查用户权限"""
+        if event.is_admin():
+            return True
+        return str(event.get_sender_id()) in self.config.get("authorized_users", [])
     async def terminate(self):
         '''可选择实现 terminate 函数，当插件被卸载/停用时会调用。'''

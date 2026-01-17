@@ -27,6 +27,12 @@
     "description": "FILE_PATH",
     "type": "string",
     "hint": "填FILE_PATH",
-    "obvious_hint": true
+    "obvious_hint": false
+  },
+  "authorized_users": {
+    "description": "授权用户列表（uid）",
+    "type": "list",
+    "hint": "被授权使用命令的用户ID列表",
+    "default": []
   }
 }
