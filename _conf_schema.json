@@ -14,13 +14,13 @@
   "DAEMON_ID": {
     "description": "DAEMON_ID",
     "type": "string",
-    "hint": "填DAEMON_ID",
+    "hint": "填DAEMON_ID 节点ID",
     "obvious_hint": true
   },
   "INSTANCE_ID": {
     "description": "INSTANCE_ID",
     "type": "string",
-    "hint": "填INSTANCE_ID",
+    "hint": "填INSTANCE_ID 实例ID",
     "obvious_hint": true
   },
   "FILE_PATH": {
